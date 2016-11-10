@@ -2,7 +2,7 @@
 BrianDuck is your regular, everyday, hardworking duck.  By day he sits eating bread and looking cute at the pond.  By night he's a carpenter, crafting fine furniture - all from memory.  Brian the Duck is a simple creature and he needs a little direction getting around his work ship.  Can you help him out?
 
 ## Commands
-BrianDuck was inspired by Brainf-ck...  So there are a few similarities in the syntax and their operations.  Be warned they **aren't** the same.
+BrianDuck was inspired by Brainf-ck.  There are a few similarities in the syntax and their operations.  BUT Be warned they **aren't** the same.
 
 Command | Description |
 --- | --- |
@@ -12,7 +12,7 @@ Command | Description |
 - | Drop
 ! | Build
 
-## The Rules
+## Rules
 1. It takes 4 Legs and 1 Top to build a table.
 2. Workbenches are small.   They can hold all sorts of items but to build a table Brian needs room to work.  The workbench can only have the exact materials.
 3. Brian can only carry one item at a time... he's a duck, he's not exactly strong.

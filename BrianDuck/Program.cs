@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace BrianDuck
 {
@@ -68,17 +69,12 @@ namespace BrianDuck
                     case '-':
                         instructions.Add(new Decrement());
                         break;
-                    case '[':
-                        //instructions.Add(new StartLoop());
-                        break;
-                    case ']':
-                        //instructions.Add(new EndLoop());
-                        break;
                     case '!':
                         instructions.Add(new Assembly());
                         break;
                     default:
-                        throw new Exception("Weird");
+                        Debug.WriteLine("Unknown character.  Instruction Ignored.");
+                        break;
                 }
             }
             return instructions;
@@ -291,22 +287,6 @@ namespace BrianDuck
                 {
                     Console.WriteLine("Wrong number of stuffs.  Maybe too much, maybe too little.");
                 }
-            }
-        }
-
-        private class StartLoop : IInstruction
-        {
-            public void Execute(BrianDuck brianDuck, Workbench[] gameboard)
-            {
-                Console.WriteLine(nameof(StartLoop));
-            }
-        }
-
-        private class EndLoop : IInstruction
-        {
-            public void Execute(BrianDuck brianDuck, Workbench[] gameboard)
-            {
-                Console.WriteLine(nameof(EndLoop));
             }
         }
     }

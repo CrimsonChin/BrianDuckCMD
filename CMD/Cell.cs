@@ -1,13 +1,13 @@
-﻿namespace BrianDuck
+﻿namespace CMD
 {
-    internal class Workbench
+    internal class Cell
     {
-        public Workbench()
+        public Cell()
             : this(false)
         {
         }
 
-        public Workbench(bool isFinal)
+        public Cell(bool isFinal)
         {
             IsFinal = isFinal;
         }
@@ -16,8 +16,8 @@
         public int TableCount { get; set; }
         public int TopCount { get; set; }
         public int LegCount { get; set; }
-
         public bool IsEmpty => TableCount == 0 && TopCount == 0 && LegCount == 0;
+        public int ByteCount { get; set; }
 
         public Material PickUp()
         {

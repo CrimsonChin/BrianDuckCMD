@@ -1,20 +1,22 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace BrianDuck
+namespace CMD.Instructions
 {
-    internal class Increment : IInstruction
+    internal class Input : IInstruction
     {
-        public void Execute(BrianDuck brianDuck, Workbench[] gameboard)
+        public void Execute(ProcessorContext processorContext, BrianDuck brianDuck, Cell[] cells)
         {
-            Console.WriteLine(nameof(Increment));
-
             if (brianDuck.CarriedItem != Material.None)
             {
                 Console.WriteLine("Brian is already holding something.  He cannot pickup");
                 return;
             }
 
-            var workbench = gameboard[brianDuck.Index];
+            var workbench = cells[processorContext.PointerIndex];
             if (workbench.IsEmpty)
             {
                 Console.WriteLine("Nothing To PickUp");

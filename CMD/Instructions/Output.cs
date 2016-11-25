@@ -1,20 +1,18 @@
-using System;
+﻿using System;
 
-namespace BrianDuck
+namespace CMD.Instructions
 {
-    internal class Decrement : IInstruction
-    {
-        public void Execute(BrianDuck brianDuck, Workbench[] gameboard)
+    internal class Output : IInstruction
+    { 
+        public void Execute(ProcessorContext processorContext, BrianDuck brianDuck, Cell[] cells)
         {
-            Console.WriteLine(nameof(Decrement));
-
             if (brianDuck.CarriedItem == Material.None)
             {
                 Console.WriteLine("Brian isn't holding anything!");
                 return;
             }
 
-            var workbench = gameboard[brianDuck.Index];
+            var workbench = cells[processorContext.PointerIndex];
             switch (brianDuck.CarriedItem)
             {
                 case Material.Leg:

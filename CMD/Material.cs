@@ -1,4 +1,4 @@
-namespace BrianDuck
+namespace CMD
 {
     internal enum Material
     {

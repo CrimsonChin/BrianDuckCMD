@@ -31,22 +31,18 @@ namespace CMD
                 },
                 new Cell(),
                 new Cell(),
-                new Cell(),
-                new Cell(),
                 new Cell(true)
             };
 
             Draw(context, brian, cells);
 
-            //++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++.>+.+++++++..+++.>++.<<+++++++++++++++.>.+++.------.--------.>+.>.
-
             var isExecuting = true;
             while (isExecuting)
             {
-                Console.WriteLine("Enter BrainF*ck Code");
+                Console.WriteLine("Enter Brian Duck Code:");
                 var userInstructions = Console.ReadLine();
 
-                if (!userInstructions.Equals("exit"))
+                if (!string.IsNullOrEmpty(userInstructions) && !userInstructions.Equals("exit"))
                 {
                     var instructions = ParseInstructions(userInstructions);
                     context.Instructions = instructions;
@@ -118,10 +114,9 @@ namespace CMD
             var table = string.Empty;
             var tops = string.Empty;
             var legs = string.Empty;
-            var carriedItem = string.Empty;
 
-            var pointer = string.Empty;
-            var byteCount = string.Empty;
+            var bryanDuck = string.Empty;
+            var breadCount = string.Empty;
 
             var benchesReadyForSale = 0;
 
@@ -129,11 +124,8 @@ namespace CMD
             {
                 var workbench = cells[index];
                 table += workbench.TableCount.ToString("D3") + " | ";
-                ;
                 tops += workbench.TopCount.ToString("D3") + " | ";
-                ;
                 legs += workbench.LegCount.ToString("D3") + " | ";
-                ;
 
                 string item;
                 switch (brianDuck.CarriedItem)
@@ -154,11 +146,9 @@ namespace CMD
                         item = " ";
                         break;
                 }
-                //carriedItem += $" {item} " + " | ";
-                var cell = cells[index];
-                byteCount += cell.ByteCount.ToString("D3") + " | ";
-                pointer += (processorContext.PointerIndex == index ? $" {item} " : "   ") + " | ";
 
+                breadCount += workbench.ByteCount.ToString("D3") + " | ";
+                bryanDuck += (processorContext.PointerIndex == index ? $" {item} " : "   ") + " | ";
 
                 if (workbench.IsFinal)
                 {
@@ -169,8 +159,8 @@ namespace CMD
             Console.WriteLine("TABLE  : " + table);
             Console.WriteLine("TOPS   : " + tops);
             Console.WriteLine("LEGS   : " + legs);
-            Console.WriteLine("BREAD  : " + byteCount);
-            Console.WriteLine("BRIAN  : " + pointer);
+            Console.WriteLine("BREAD  : " + breadCount);
+            Console.WriteLine("BRIAN  : " + bryanDuck);
             Console.WriteLine("Benches Ready For Sale: " + benchesReadyForSale);
 
             List<string> motivationQuotes = new List<string>
@@ -188,8 +178,8 @@ namespace CMD
 
             if (benchesReadyForSale > 0)
             {
-                Random r = new Random();
-                var randomIndex = r.Next(0, motivationQuotes.Count);
+                Random random = new Random();
+                var randomIndex = random.Next(0, motivationQuotes.Count);
                 var text = motivationQuotes[randomIndex];
                 //Console.WriteLine(@"         __________________________________ ");
                 //Console.WriteLine(@"   _    |                                  |");

@@ -18,7 +18,6 @@ namespace CMD.Instructions
                 case Material.Leg:
                     workbench.LegCount++;
                     break;
-
                 case Material.Top:
                     workbench.TopCount++;
                     break;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using CMD.Instructions;
 
 namespace CMD
@@ -9,60 +10,102 @@ namespace CMD
     {
         private static void Main(string[] args)
         {
-            Console.WriteLine(@"         ______________________________ ");
-            Console.WriteLine(@"   _    |                              |");
-            Console.WriteLine(@"__(.)= <   Brian Duck; Table Maker!    |");
-            Console.WriteLine(@"\___)   |______________________________|");
-            Console.WriteLine();
-
-            var brian = new BrianDuck();
-            var context = new ProcessorContext();
-            Cell[] cells =
-            {
-                new Cell
-                {
-                    TableCount = 1,
-                    TopCount = 2
-                },
-                new Cell
-                {
-                    TableCount = 1,
-                    LegCount = 9
-                },
-                new Cell(),
-                new Cell(),
-                new Cell(true)
-            };
-
-            Draw(context, brian, cells);
-
             var isExecuting = true;
             while (isExecuting)
             {
-                Console.WriteLine("Enter Brian Duck Code:");
+                DrawBryanDuckQuote("Bryan Duck; Table Maker Extraordinaire");
+
+                var brian = new BrianDuck();
+                var context = new ProcessorContext();
+                Cell[] cells =
+                {
+                    new Cell
+                    {
+                        TableCount = 1,
+                        TopCount = 2
+                    },
+                    new Cell
+                    {
+                        TableCount = 1,
+                        LegCount = 9
+                    },
+                    new Cell(),
+                    new Cell(),
+                    new Cell(true)
+                };
+
+                DrawGameBoard(context, brian, cells);
+
+                Console.WriteLine("You have one attempt to build as many tables as possible.");
+                Console.WriteLine("Enter BrianDuck code:");
+
                 var userInstructions = Console.ReadLine();
 
-                if (!string.IsNullOrEmpty(userInstructions) && !userInstructions.Equals("exit"))
-                {
-                    var instructions = ParseInstructions(userInstructions);
-                    context.Instructions = instructions;
-                    context.InstructionIndex = 0;
+                var instructions = ParseInstructions(userInstructions);
+                context.Instructions = instructions;
+                context.InstructionIndex = 0;
 
-                    while (context.InstructionIndex < instructions.Count)
+                while (context.InstructionIndex < instructions.Count)
+                {
+                    instructions[context.InstructionIndex].Execute(context, brian, cells);
+                    DrawGameBoard(context, brian, cells);
+                    context.InstructionIndex++;
+                }
+
+                var lastBench = cells.SingleOrDefault(x => x.IsFinal);
+                if (lastBench != null)
+                {
+                    var tableScore = lastBench.TableCount*15;
+                    Console.WriteLine("Tables Ready For Sale: " + lastBench.TableCount);
+                    Console.WriteLine($"Table Score: { tableScore }. Code Length: {instructions.Count}.  Final Score { tableScore - instructions.Count }");
+
+                    IList<string> motivationQuotes;
+                    if (lastBench.TableCount > 0)
                     {
-                        instructions[context.InstructionIndex].Execute(context, brian, cells);
-                        Draw(context, brian, cells);
-                        context.InstructionIndex++;
+                        motivationQuotes = new List<string>
+                        {
+                            "WOW! Business is looking good today",
+                            "I'm excited for the future",
+                            "Top Banana? Ha! Top duck more like!",
+                            "The Kids will be proud of me today",
+                            "I'm going to be rich",
+                            $"{lastBench.TableCount} Tables! A-MAY-ZING",
+                            "I might be the cleverest duck in the world",
+                            "Putting the DUCK in Producktive",
+                            "Cool beans! TABLES!"
+                        };
+                    }
+                    else
+                    {
+                        motivationQuotes = new List<string>
+                        {
+                            "Not a single table.  I'm in trouble.",
+                            "Woah my work was poor today.",
+                            "Where did I put the rope?",
+                            "I-I-I I'm so embarrassed"
+                        };
+                    }
+
+                    var random = new Random();
+                    var randomIndex = random.Next(0, motivationQuotes.Count);
+                    var text = motivationQuotes[randomIndex];
+                    DrawBryanDuckQuote(text);
+
+
+                    Console.WriteLine("Press 'e' to exit or hit return to go again");
+
+                    userInstructions = Console.ReadLine();
+
+                    if (!string.IsNullOrEmpty(userInstructions) && userInstructions.Equals("e"))
+                    {
+                        isExecuting = false;
+                    }
+                    else
+                    {
+                        Console.Clear();
                     }
                 }
-                else
-                {
-                    isExecuting = false;
-                }
             }
-
-
-            Console.ReadKey();
         }
 
         private static List<IInstruction> ParseInstructions(string code)
@@ -109,16 +152,23 @@ namespace CMD
             return null;
         }
 
-        private static void Draw(ProcessorContext processorContext, BrianDuck brianDuck, IReadOnlyList<Cell> cells)
+        private static void DrawBryanDuckQuote(string quote)
         {
+            Console.WriteLine($@"         {new string('_', quote.Length + 2)} ");
+            Console.WriteLine($@"   _    |{new string(' ', quote.Length + 2)}| ");
+            Console.WriteLine($@"__(.)= <  {quote} |");
+            Console.WriteLine($@"\___)   |{new string('_', quote.Length + 2)}|");
+            Console.WriteLine();
+        }
+
+        private static void DrawGameBoard(ProcessorContext processorContext, BrianDuck brianDuck, IReadOnlyList<Cell> cells)
+        {
+            var endMarker = string.Empty;
             var table = string.Empty;
             var tops = string.Empty;
             var legs = string.Empty;
-
             var bryanDuck = string.Empty;
             var breadCount = string.Empty;
-
-            var benchesReadyForSale = 0;
 
             for (var index = 0; index < cells.Count; index++)
             {
@@ -126,6 +176,7 @@ namespace CMD
                 table += workbench.TableCount.ToString("D3") + " | ";
                 tops += workbench.TopCount.ToString("D3") + " | ";
                 legs += workbench.LegCount.ToString("D3") + " | ";
+                endMarker += workbench.IsFinal ? "END" : "      ";
 
                 string item;
                 switch (brianDuck.CarriedItem)
@@ -149,49 +200,14 @@ namespace CMD
 
                 breadCount += workbench.ByteCount.ToString("D3") + " | ";
                 bryanDuck += (processorContext.PointerIndex == index ? $" {item} " : "   ") + " | ";
-
-                if (workbench.IsFinal)
-                {
-                    benchesReadyForSale += workbench.TableCount;
-                }
             }
 
+            Console.WriteLine("         " + endMarker);
             Console.WriteLine("TABLE  : " + table);
             Console.WriteLine("TOPS   : " + tops);
             Console.WriteLine("LEGS   : " + legs);
             Console.WriteLine("BREAD  : " + breadCount);
             Console.WriteLine("BRIAN  : " + bryanDuck);
-            Console.WriteLine("Benches Ready For Sale: " + benchesReadyForSale);
-
-            List<string> motivationQuotes = new List<string>
-            {
-                "WOW! Business is looking good today",
-                "I'm excited for the future",
-                "Top Banana? Ha! Top duck more like!",
-                "The Kids will be proud of me today",
-                "I'm going to be rich",
-                $"{benchesReadyForSale} Tables! A-MAY-ZING",
-                "I might be the cleverest duck in the world",
-                "Putting the DUCK in Producktive",
-                "Cool beans! TABLES!"
-            };
-
-            if (benchesReadyForSale > 0)
-            {
-                Random random = new Random();
-                var randomIndex = random.Next(0, motivationQuotes.Count);
-                var text = motivationQuotes[randomIndex];
-                //Console.WriteLine(@"         __________________________________ ");
-                //Console.WriteLine(@"   _    |                                  |");
-                //Console.WriteLine(@"__(.)= <  I can't build a table with this! |");
-                //Console.WriteLine(@"\___)   |__________________________________|");
-
-                Console.WriteLine($@"         {new string('_', text.Length + 2)} ");
-                Console.WriteLine($@"   _    |{new string(' ', text.Length + 2)}| ");
-                Console.WriteLine($@"__(.)= <  {text} |");
-                Console.WriteLine($@"\___)   |{new string('_', text.Length + 2)}|");
-                Console.WriteLine();
-            }
 
             Console.WriteLine();
         }

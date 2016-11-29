@@ -13,6 +13,8 @@ Command | Description |
 , | Pickup item from workbench
 . | Put item on workbench
 ! | Build table
+[ | Start loop
+] | End loop
 
 ## Rules
 1. It takes 4 Legs and 1 Top to build a table.

@@ -8,8 +8,8 @@ Command | Description |
 --- | --- |
 > | Move one place right
 < | Move one place left
-+ | Drop breadcrumb 
-- | Pickup breadcrumb
++ | Add a breadcrumb to your current locaiton for later
+- | Remove a breadcrumb from your current location.  Yum!
 , | Pickup item from workbench
 . | Put item on workbench
 ! | Build table
@@ -28,9 +28,9 @@ Command | Description |
 6. Brian doesn't mind repetition.  He can handle loops now.  Its pretty simple, Brian works for bread.  If you leave bread at a workbench Brian will go back to get it.  For example: ++[>+<-] means
   1. "+" Leave a pieces of bread on a workbench as a snack.
   2. "+" Leave a second piece of bread.
-  3. "[" Then start the loop .  
+  3. "[" Then start the loop.  
   4.  ">" He moves one space right
   5. "+" And drops another piece of bread. 
   9. "<" He goes back to the orignal bench
   10. "-" and eats the bread. 
-  11. "]" Time to go back to where we started But there is still one piece of bread on that workbench so he continues the loop again until there is no more bread left.  (Note: see brainf-ck for a better explanation)
+  11. "]" Time to go back to where we started But there is still one piece of bread on that workbench so he continues the loop again until there is no more bread left.  Bryan has moved all the bread one place to the right. (Note: see brainf-ck for a better explanation)
